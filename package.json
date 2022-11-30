@@ -1,0 +1,16 @@
+{
+	"name": "root",
+	"private": true,
+	"devDependencies": {
+		"@types/cors": "^2.8.12",
+		"lerna": "^4.0.0"
+	},
+	"workspaces": {
+		"packages": [
+			"packages/**"
+		]
+	},
+	"scripts": {
+		"start": "yarn && npx lerna run dev --parallel"
+	}
+}
