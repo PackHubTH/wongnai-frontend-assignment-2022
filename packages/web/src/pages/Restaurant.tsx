@@ -45,9 +45,19 @@ const Restaurant = () => {
         menuName={menuName}
       />
       <Banner image={data?.pages[0].coverImage} />
-      <div className="l flex w-11/12 max-w-screen-xl flex-col bg-white">
+      <div className="flex w-11/12 max-w-screen-xl flex-col bg-white">
         <Title {...data?.pages[0]} />
-        {/* <SearchBox value={search} onChange={() => setSearch} /> */}
+        <div className="flex flex-col items-center justify-between gap-4 px-6 sm:flex-row">
+          <SearchBox onChange={() => setSearch} />
+          <div className="flex gap-4">
+            <a className="relative cursor-pointer font-medium text-indigo-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition hover:before:scale-x-100">
+              Relevant
+            </a>
+            <a className="relative cursor-pointer font-medium text-indigo-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition hover:before:scale-x-100">
+              Discounted
+            </a>
+          </div>
+        </div>
         <div className="grid grid-flow-row grid-cols-1 gap-8 p-4 lg:grid-cols-2">
           {data?.pages.map((page, i) => {
             return (

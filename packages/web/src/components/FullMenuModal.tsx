@@ -1,6 +1,8 @@
 import { AiFillCloseCircle } from "react-icons/ai";
 import useFullMenuItemAPI from "@api/FullMenuItemAPI";
 import Error from "@pages/Error";
+import checkDiscountedPeriod from "@utils/checkDiscountedPeriod";
+import DiscountBadge from "@components/DiscountBadge";
 
 type ModalProps = {
   showModal: boolean;
@@ -71,7 +73,7 @@ const FullMenuModal = (props: ModalProps) => {
         onClick={() => props.setShowModal(false)}
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       ></div>
-      <div className="absolute z-50 flex h-4/5 w-screen max-w-2xl flex-col gap-2 overflow-y-auto rounded-xl  bg-white pb-4 shadow-2xl md:w-4/5">
+      <div className="absolute z-50 flex h-max max-h-[80%] w-screen max-w-2xl flex-col gap-2 overflow-y-auto rounded-xl  bg-white pb-4 shadow-2xl md:w-4/5">
         <AiFillCloseCircle
           className="absolute top-2 right-4 h-8 w-8 cursor-pointer text-red-500"
           onClick={() => props.setShowModal(false)}
@@ -87,6 +89,21 @@ const FullMenuModal = (props: ModalProps) => {
             ราคา {data.fullPrice} บาท
           </span>
           <span className="text-md text-gray-500 line-through">80 บาท</span>
+          {data.discountedTimePeriod &&
+          checkDiscountedPeriod(
+            data.discountedTimePeriod,
+            data.discountedPercent
+          ) ? (
+            <DiscountBadge discount={data.discountedPercent} />
+          ) : null}
+        </p>
+        <p className="space-x-2 px-4">
+          <span className="text-md font-medium text-blue-500">
+            ขาย: {data.sold} ชิ้น
+          </span>
+          <span className="text-md font-medium text-red-500">
+            เหลือ: {data.totalInStock} ชิ้น
+          </span>
         </p>
         <div className="px-4">
           {data.options.map((option: OptionsProps, i: number) => {
