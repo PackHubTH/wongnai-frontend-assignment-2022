@@ -1,14 +1,16 @@
 import React from "react";
 import ShortMenu from "@type/ShortMenu";
-import PopularBadge from "@components/PopularBadge";
 import DiscountBadge from "@components/DiscountBadge";
+import checkDiscountedPeriod from "@utils/checkDiscountedPeriod";
+import numberWithCommas from "@utils/numberWithCommas";
 
 type ShortMenuItemProp = {
   item: ShortMenu;
   isFirst: number;
+  onClick: () => void;
 };
 
-const ShortMenuItem = ({ item, isFirst }: ShortMenuItemProp) => {
+const ShortMenuItem = ({ item, isFirst, onClick }: ShortMenuItemProp) => {
   const {
     name,
     thumbnailImage,
@@ -19,35 +21,17 @@ const ShortMenuItem = ({ item, isFirst }: ShortMenuItemProp) => {
     totalInStock,
   } = item;
 
-  const getTimefromString = (time: string) => {
-    const time_temp: string[] = time.split(":");
-    const now = new Date();
-    return new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      parseInt(time_temp[0]),
-      parseInt(time_temp[1])
-    ).getTime();
-  };
-  // console.log(getDateFromHours("01:12").getTime());
-
-  const checkDiscountedPeriod = () => {
-    const now = new Date().getTime();
-    if (discountedTimePeriod && discountedPercent > 0) {
-      return (
-        now >= getTimefromString("00:00") &&
-        now <= getTimefromString(discountedTimePeriod.begin)
-      );
-    }
-    return false;
-  };
-
   return (
-    <div className="relative flex w-full cursor-pointer items-center  rounded-xl border-2 transition hover:scale-105  hover:shadow-xl ">
-      {/* <div className="absolute flex justify-center items-center opacity-70 w-full h-full bg-gray-500 rounded-xl ">
-        <p className="text-4xl">หมด</p>
-      </div> */}
+    <div
+      className="relative flex w-full cursor-pointer items-center rounded-xl border-2 transition hover:scale-[1.02]  hover:shadow-xl"
+      style={{ opacity: totalInStock === 0 ? 0.4 : 1 }}
+      onClick={onClick}
+    >
+      {totalInStock === 0 && (
+        <div className="absolute flex h-full w-full items-center justify-center rounded-xl">
+          <p className="text-4xl">หมด</p>
+        </div>
+      )}
       {thumbnailImage ? (
         <img
           alt={name}
@@ -64,18 +48,34 @@ const ShortMenuItem = ({ item, isFirst }: ShortMenuItemProp) => {
       <div className="m-4 flex flex-col  gap-2 break-words">
         <h1>{name}</h1>
         <div className=" space-x-2 text-xl font-medium text-green-800">
-          <span className={checkDiscountedPeriod() ? "line-through" : ""}>
-            {fullPrice} บาท{" "}
+          <span
+            className={
+              discountedTimePeriod &&
+              checkDiscountedPeriod(discountedTimePeriod, discountedPercent)
+                ? "line-through"
+                : ""
+            }
+          >
+            {numberWithCommas(fullPrice)} บาท{" "}
           </span>
-          {checkDiscountedPeriod() && (
-            <span>{(fullPrice * (100 - discountedPercent)) / 100} บาท</span>
-          )}
+          {discountedTimePeriod &&
+            checkDiscountedPeriod(discountedTimePeriod, discountedPercent) && (
+              <span>
+                {numberWithCommas(
+                  (fullPrice * (100 - discountedPercent)) / 100
+                )}{" "}
+                บาท
+              </span>
+            )}
         </div>
-        <p className="text-sm text-gray-700">ขายได้ {sold} ชิ้น</p>
+        <p className="text-sm text-gray-700">
+          ขายได้ {numberWithCommas(sold)} ชิ้น
+        </p>
         {/* badge */}
         <div className="space-x-2">
-          {isFirst === 0 ? <PopularBadge /> : null}
-          {checkDiscountedPeriod() ? (
+          {/* {isFirst === 0 ? <PopularBadge /> : null} */}
+          {discountedTimePeriod &&
+          checkDiscountedPeriod(discountedTimePeriod, discountedPercent) ? (
             <DiscountBadge discount={discountedPercent} />
           ) : null}
         </div>
