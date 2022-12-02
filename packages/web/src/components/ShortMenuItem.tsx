@@ -47,26 +47,22 @@ const ShortMenuItem = ({ item, isFirst, onClick }: ShortMenuItemProp) => {
       )}
       <div className="m-4 flex flex-col  gap-2 break-words">
         <h1>{name}</h1>
-        <div className=" space-x-2 text-xl font-medium text-green-800">
-          <span
-            className={
-              discountedTimePeriod &&
-              checkDiscountedPeriod(discountedTimePeriod, discountedPercent)
-                ? "line-through"
-                : ""
-            }
-          >
-            {numberWithCommas(fullPrice)} บาท{" "}
-          </span>
+        <div className=" space-x-2 text-xl font-medium text-green-700">
           {discountedTimePeriod &&
-            checkDiscountedPeriod(discountedTimePeriod, discountedPercent) && (
-              <span>
-                {numberWithCommas(
-                  (fullPrice * (100 - discountedPercent)) / 100
-                )}{" "}
-                บาท
-              </span>
-            )}
+          checkDiscountedPeriod(discountedTimePeriod, discountedPercent) ? (
+            <span>
+              {numberWithCommas((fullPrice * (100 - discountedPercent)) / 100)}{" "}
+              บาท
+            </span>
+          ) : (
+            <span>{numberWithCommas(fullPrice)} บาท</span>
+          )}
+          {discountedTimePeriod &&
+          checkDiscountedPeriod(discountedTimePeriod, discountedPercent) ? (
+            <span className="text-sm font-medium text-gray-500 line-through">
+              {numberWithCommas(fullPrice)} บาท{" "}
+            </span>
+          ) : null}
         </div>
         <p className="text-sm text-gray-700">
           ขายได้ {numberWithCommas(sold)} ชิ้น
