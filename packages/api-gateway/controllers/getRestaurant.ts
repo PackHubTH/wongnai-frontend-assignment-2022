@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { Request, Response } from 'express';
-import NodeCache from 'node-cache';
+// import NodeCache from 'node-cache';
 import {z} from 'zod';
+import cache from '../cache/RestaurantCache';
 
-const cache = new NodeCache({ stdTTL: 300});
+// const cache = new NodeCache({ stdTTL: 300});
 const mySchema = z.object({
   restaurantId: z.string().regex(/^[0-9]+$/),
   cursor: z.number().int().min(0)
@@ -45,11 +46,27 @@ const getRestaurant = async (req: Request, res: Response) => {
     const menuResult = await Promise.all(promise);
     // console.log('menuResult', menuResult.length);
     // console.log('menuResult', menuResult[0]);
+    if (menuResult.length < 10)
+      cache.set("isGetAll", true);
 
     //sort menuResult by sold
-    // menuResult.sort((a:any, b:any) => {
-    //   return b.sold - a.sold;
-    // })
+    if (menuResult.length > 0) {
+      const sortMenu = menuResult.sort((a:any, b:any) => {
+        return b.sold - a.sold;
+      })
+      console.log(sortMenu[0])
+      if (cache.has("popular")) 
+      {
+        const temp: any = cache.get("popular");
+        console.log('temp', temp);
+        if (sortMenu[0].sold > temp.sold) 
+          cache.set("popular", sortMenu[0]);
+      }
+      else
+        cache.set("popular", sortMenu[0]);
+    }
+
+    
 
     const data = {
       ...response.data,

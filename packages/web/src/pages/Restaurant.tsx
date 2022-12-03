@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
 import useRestaurantAPI from "@api/RestaurantAPI";
 import ShortMenuItem from "@components/ShortMenuItem";
 import ShortMenu from "@type/ShortMenu";
@@ -15,25 +14,17 @@ import TitleLayout from "@components/TitleLayout";
 import ButtonGroup from "@components/ButtonGroup";
 
 const Restaurant = () => {
-  // const { ref, inView } = useInView();
   const [showModal, setShowModal] = useState(false);
   const [menuName, setMenuName] = useState("");
   const [search, setSearch] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
 
-  const {
-    data,
-    error,
-    isFetchingNextPage,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-  } = useRestaurantAPI(import.meta.env.VITE_RESTAURANT_ID);
+  const { data, error, isFetchingNextPage, isLoading, fetchNextPage } =
+    useRestaurantAPI(import.meta.env.VITE_RESTAURANT_ID);
 
   const handleScroll = () => {
     const offset = window.scrollY;
-    // console.log("offset", offset, scrolled);
     if (offset > 322) {
       setScrolled(true);
     } else {
@@ -105,7 +96,7 @@ const Restaurant = () => {
                         isFirst={index}
                         onClick={() => {
                           setShowModal(true);
-                          setMenuName(item.name);
+                          setMenuName(item.id);
                         }}
                       />
                     );

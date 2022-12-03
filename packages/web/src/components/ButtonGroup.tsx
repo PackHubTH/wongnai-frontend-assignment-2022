@@ -1,5 +1,3 @@
-import React from "react";
-
 type ButtonGroupProps = {
   isDefault: boolean;
   setIsDefault: (isDefault: boolean) => void;

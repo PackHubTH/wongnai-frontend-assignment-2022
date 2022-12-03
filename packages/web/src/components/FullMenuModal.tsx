@@ -1,13 +1,12 @@
-import { AiFillCloseCircle } from "react-icons/ai";
 import useFullMenuItemAPI from "@api/FullMenuItemAPI";
 import Error from "@pages/Error";
 import checkDiscountedPeriod from "@utils/checkDiscountedPeriod";
 import numberWithCommas from "@utils/numberWithCommas";
 import DiscountBadge from "@components/DiscountBadge";
-import { Fragment } from "react";
 import ModalLayout from "./ModalLayout";
 import Timer from "./Timer";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import PopularBadge from "@components/PopularBadge";
 
 type ModalProps = {
   showModal: boolean;
@@ -25,12 +24,7 @@ type OptionsProps = {
 const FullMenuModal = (props: ModalProps) => {
   if (!props.showModal) return null;
 
-  const [time, setTime] = useState(Date.now());
   const [isDiscounted, setIsDiscounted] = useState(false);
-
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
 
   const { data, error, isLoading } = useFullMenuItemAPI(
     import.meta.env.VITE_RESTAURANT_ID,
@@ -58,30 +52,24 @@ const FullMenuModal = (props: ModalProps) => {
 
   if (error) return <Error />;
 
-  // if (!data.discountedPercent) {
-  data.discountedPercent = 21;
-  data.discountedTimePeriod = {
-    begin: "00:00",
-    end: "04:45",
-  };
-  // }
+  // data.discountedPercent = 21;
+  // data.discountedTimePeriod = {
+  //   begin: "00:00",
+  //   end: "04:45",
+  // };
 
-  console.log("enter");
   if (
     !isDiscounted &&
     data.discountedTimePeriod &&
     checkDiscountedPeriod(data.discountedTimePeriod, data.discountedPercent)
   ) {
-    console.log("change state");
     setIsDiscounted(true);
   }
 
-  console.log("isDiscounted :>> ", isDiscounted);
-  // console.log("modal data", data);
-  // if (data)
   return (
     <ModalLayout showModal={props.showModal} setShowModal={props.setShowModal}>
       <div className="relative h-72 w-full">
+        {data.popular && data?.popular.id === data.id && <PopularBadge />}
         <div className="absolute -top-24 h-full w-full bg-gradient-to-b from-black to-transparent"></div>
         <img
           src={data.largeImage ?? "https://via.placeholder.com/600?text=image"}
@@ -133,7 +121,7 @@ const FullMenuModal = (props: ModalProps) => {
         </p>
       </div>
 
-      <div className="h-0 bg-gray-200 py-1"></div>
+      {data.options.length > 0 && <div className="h-0 bg-gray-200 py-1"></div>}
 
       <div className=" overflow-auto bg-white px-4 py-2">
         {data.options.map((option: OptionsProps, i: number) => {
@@ -149,7 +137,6 @@ const FullMenuModal = (props: ModalProps) => {
       </div>
     </ModalLayout>
   );
-  // else return null;
 };
 
 export default FullMenuModal;
