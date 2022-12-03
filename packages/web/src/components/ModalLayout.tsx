@@ -1,5 +1,4 @@
 import React from "react";
-import { AiFillCloseCircle } from "react-icons/ai";
 
 type ModalProps = {
   showModal: boolean;
@@ -13,7 +12,6 @@ const ModalLayout = ({ children, showModal, setShowModal }: ModalProps) => {
       className="fixed z-30 flex h-screen w-screen items-center justify-center  transition duration-500"
       style={{
         visibility: showModal ? "visible" : "hidden",
-        opacity: showModal ? 1 : 0,
       }}
     >
       <div
@@ -21,11 +19,16 @@ const ModalLayout = ({ children, showModal, setShowModal }: ModalProps) => {
         onClick={() => setShowModal(false)}
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       ></div>
-      <div className="absolute z-50 flex h-4/5 w-screen max-w-2xl flex-col gap-2 overflow-auto rounded-xl  bg-white pb-4 shadow-2xl md:w-4/5">
-        <AiFillCloseCircle
-          className="absolute top-2 right-4 h-8 w-8 cursor-pointer text-red-500"
+      <div
+        className="absolute z-50 flex w-screen max-w-2xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl md:w-4/5"
+        style={{ maxHeight: "80%" }}
+      >
+        <h1
+          className="absolute top-2 right-6 z-40 cursor-pointer text-2xl text-white"
           onClick={() => setShowModal(false)}
-        />
+        >
+          X
+        </h1>
         {children}
       </div>
     </div>

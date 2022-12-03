@@ -6,6 +6,7 @@
 
 html, body {
   font-family: 'Mitr', sans-serif;
+  scroll-behavior: smooth;
 }
 
 /* width */

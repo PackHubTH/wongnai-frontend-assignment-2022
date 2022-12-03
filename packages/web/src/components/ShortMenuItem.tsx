@@ -11,7 +11,7 @@ type ShortMenuItemProp = {
 };
 
 const ShortMenuItem = ({ item, isFirst, onClick }: ShortMenuItemProp) => {
-  const {
+  let {
     name,
     thumbnailImage,
     discountedTimePeriod,
@@ -21,37 +21,38 @@ const ShortMenuItem = ({ item, isFirst, onClick }: ShortMenuItemProp) => {
     totalInStock,
   } = item;
 
+  if (name.includes("a")) totalInStock = 0;
+  if (!discountedPercent) {
+    discountedPercent = 21;
+    discountedTimePeriod = {
+      begin: "00:00",
+      end: "02:50",
+    };
+  }
   return (
     <div
-      className="relative flex w-full cursor-pointer items-center rounded-xl border-2 transition hover:scale-[1.02]  hover:shadow-xl"
-      style={{ opacity: totalInStock === 0 ? 0.4 : 1 }}
-      onClick={onClick}
+      className="relative flex w-full items-center gap-4 rounded-xl border-2 p-4 transition  hover:scale-[1.02] hover:shadow-xl"
+      style={{
+        opacity: !totalInStock ? 0.4 : 1,
+        filter: !totalInStock ? "grayscale(1)" : "none",
+        cursor: !totalInStock ? "not-allowed" : "pointer",
+      }}
+      onClick={totalInStock ? onClick : () => {}}
     >
-      {totalInStock === 0 && (
-        <div className="absolute flex h-full w-full items-center justify-center rounded-xl">
-          <p className="text-4xl">หมด</p>
-        </div>
-      )}
-      {thumbnailImage ? (
-        <img
-          alt={name}
-          className="m-4 h-32 w-32 rounded-lg object-cover"
-          src={thumbnailImage}
-        />
-      ) : (
-        <img
-          alt="coverImage"
-          className="m-4 h-32 w-32 rounded-lg object-cover"
-          src="https://via.placeholder.com/150/?text=image"
-        />
-      )}
-      <div className="m-4 flex flex-col  gap-2 break-words">
-        <h1>{name}</h1>
+      <img
+        alt={name}
+        className="h-full w-full max-w-[72px] rounded-lg object-cover sm:max-w-[128px]"
+        src={thumbnailImage ?? "https://via.placeholder.com/150/?text=image"}
+      />
+      <div className="flex flex-col gap-2 overflow-clip break-words">
+        <h1 className="text-sm sm:text-lg">{name}</h1>
         <div className=" space-x-2 text-xl font-medium text-green-700">
           {discountedTimePeriod &&
           checkDiscountedPeriod(discountedTimePeriod, discountedPercent) ? (
             <span>
-              {numberWithCommas((fullPrice * (100 - discountedPercent)) / 100)}{" "}
+              {numberWithCommas(
+                Math.round((fullPrice * (100 - discountedPercent)) / 100)
+              )}{" "}
               บาท
             </span>
           ) : (

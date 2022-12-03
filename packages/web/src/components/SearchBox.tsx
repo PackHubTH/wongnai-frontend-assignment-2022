@@ -8,7 +8,7 @@ type SearchProps = {
 
 const SearchBox = ({ onChange, plcaeholder }: SearchProps) => {
   return (
-    <div className="relative w-full rounded-full border-2 pl-8 pr-2 sm:w-3/5">
+    <div className="relative w-full rounded-full border-2 pl-8 pr-2 shadow-md sm:w-1/2">
       <AiOutlineSearch className="absolute left-2 top-1 text-gray-500" />
       <input
         className="h-full w-full outline-none"

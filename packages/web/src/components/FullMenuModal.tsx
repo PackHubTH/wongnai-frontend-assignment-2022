@@ -6,6 +6,8 @@ import numberWithCommas from "@utils/numberWithCommas";
 import DiscountBadge from "@components/DiscountBadge";
 import { Fragment } from "react";
 import ModalLayout from "./ModalLayout";
+import Timer from "./Timer";
+import React, { useEffect, useState } from "react";
 
 type ModalProps = {
   showModal: boolean;
@@ -15,11 +17,20 @@ type ModalProps = {
 
 type OptionsProps = {
   label: string;
-  choices: string[];
+  choices: {
+    label: string;
+  }[];
 };
 
 const FullMenuModal = (props: ModalProps) => {
   if (!props.showModal) return null;
+
+  const [time, setTime] = useState(Date.now());
+  const [isDiscounted, setIsDiscounted] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
   const { data, error, isLoading } = useFullMenuItemAPI(
     import.meta.env.VITE_RESTAURANT_ID,
@@ -28,23 +39,6 @@ const FullMenuModal = (props: ModalProps) => {
 
   if (isLoading)
     return (
-      // <div
-      //   className="fixed z-30 flex h-screen w-screen items-center justify-center  transition duration-500"
-      //   style={{
-      //     visibility: props.showModal ? "visible" : "hidden",
-      //     opacity: props.showModal ? 1 : 0,
-      //   }}
-      // >
-      //   <div
-      //     className="z-40 h-screen w-full"
-      //     onClick={() => props.setShowModal(false)}
-      //     style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-      //   ></div>
-      //   <div className="absolute z-50 flex h-4/5 w-screen max-w-2xl flex-col gap-2 rounded-xl  bg-white pb-4 shadow-2xl md:w-4/5">
-      //     <AiFillCloseCircle
-      //       className="absolute top-2 right-4 h-8 w-8 cursor-pointer text-red-500"
-      //       onClick={() => props.setShowModal(false)}
-      //     />
       <ModalLayout
         showModal={props.showModal}
         setShowModal={props.setShowModal}
@@ -64,73 +58,90 @@ const FullMenuModal = (props: ModalProps) => {
 
   if (error) return <Error />;
 
-  console.log("modal data", data);
+  // if (!data.discountedPercent) {
+  data.discountedPercent = 21;
+  data.discountedTimePeriod = {
+    begin: "00:00",
+    end: "04:45",
+  };
+  // }
+
+  console.log("enter");
+  if (
+    !isDiscounted &&
+    data.discountedTimePeriod &&
+    checkDiscountedPeriod(data.discountedTimePeriod, data.discountedPercent)
+  ) {
+    console.log("change state");
+    setIsDiscounted(true);
+  }
+
+  console.log("isDiscounted :>> ", isDiscounted);
+  // console.log("modal data", data);
   // if (data)
   return (
     <ModalLayout showModal={props.showModal} setShowModal={props.setShowModal}>
-      <img
-        // src="https://via.placeholder.com/600?text=image"
-        src={data.largeImage ?? "https://via.placeholder.com/600?text=image"}
-        className="h-80 w-full rounded-t-xl bg-fixed object-cover"
-      />
-      <h1 className="px-4 text-xl">{data.name}</h1>
-      {/* <p className="flex flex-wrap items-center gap-2 px-4">
-          <span className="text-2xl font-medium text-emerald-700 ">
-            ราคา {numberWithCommas(data.fullPrice)} บาท
-          </span>
+      <div className="relative h-72 w-full">
+        <div className="absolute -top-24 h-full w-full bg-gradient-to-b from-black to-transparent"></div>
+        <img
+          src={data.largeImage ?? "https://via.placeholder.com/600?text=image"}
+          className="h-full w-full rounded-t-xl bg-fixed object-cover"
+        />
+      </div>
+
+      <div className="space-y-1 bg-white p-4">
+        <h1 className="text-xl">{data.name}</h1>
+        <div className="flex flex-wrap items-center gap-2 text-2xl font-medium text-green-700">
+          {isDiscounted ? (
+            <span>
+              {numberWithCommas(
+                Math.round(
+                  (data.fullPrice * (100 - data.discountedPercent)) / 100
+                )
+              )}{" "}
+              บาท
+            </span>
+          ) : (
+            <span>{numberWithCommas(data.fullPrice)} บาท</span>
+          )}
           {data.discountedTimePeriod &&
           checkDiscountedPeriod(
             data.discountedTimePeriod,
             data.discountedPercent
           ) ? (
-            <Fragment>
-              <span className="text-md  text-gray-500 line-through">
-                {numberWithCommas(8000)} บาท
-              </span>
-              <DiscountBadge discount={data.discountedPercent} />
-            </Fragment>
+            <span className="text-sm font-medium text-gray-500 line-through">
+              {numberWithCommas(data.fullPrice)} บาท{" "}
+            </span>
           ) : null}
-        </p> */}
-      <div className="flex flex-wrap items-center gap-2 px-4 text-2xl font-medium text-green-700">
+        </div>
         {data.discountedTimePeriod &&
         checkDiscountedPeriod(
           data.discountedTimePeriod,
           data.discountedPercent
         ) ? (
-          <span>
-            {numberWithCommas(
-              (data.fullPrice * (100 - data.discountedPercent)) / 100
-            )}{" "}
-            บาท
-          </span>
-        ) : (
-          <span>{numberWithCommas(data.fullPrice)} บาท</span>
-        )}
-        {data.discountedTimePeriod &&
-        checkDiscountedPeriod(
-          data.discountedTimePeriod,
-          data.discountedPercent
-        ) ? (
-          <span className="text-sm font-medium text-gray-500 line-through">
-            {numberWithCommas(data.fullPrice)} บาท{" "}
-          </span>
+          <div className="flex flex-wrap gap-2">
+            <DiscountBadge discount={data.discountedPercent} />
+            <Timer
+              setIsDiscounted={setIsDiscounted}
+              callQueuedTime={data.discountedTimePeriod.end}
+            />
+          </div>
         ) : null}
+        <p className="flex flex-wrap gap-2 pt-2 text-xs text-gray-500">
+          ขาย: {numberWithCommas(data.sold)} ชิ้น | เหลือ:{" "}
+          {numberWithCommas(data.totalInStock)} ชิ้น
+        </p>
       </div>
-      <p className="flex flex-wrap gap-2 px-4">
-        <span className="text-md font-medium text-blue-500">
-          ขาย: {numberWithCommas(data.sold)} ชิ้น
-        </span>
-        <span className="text-md font-medium text-red-500">
-          เหลือ: {numberWithCommas(data.totalInStock)} ชิ้น
-        </span>
-      </p>
-      <div className="px-4">
+
+      <div className="h-0 bg-gray-200 py-1"></div>
+
+      <div className=" overflow-auto bg-white px-4 py-2">
         {data.options.map((option: OptionsProps, i: number) => {
           return (
             <div key={i} className="py-2">
-              <h1 className="pb-2 text-xl">{option.label}</h1>
+              <ul className="list-disc pb-2 text-xl">{option.label}</ul>
               {option.choices.map((item, j) => {
-                return <p key={j}>- {item.label}</p>;
+                return <li key={j}>{item.label}</li>;
               })}
             </div>
           );
