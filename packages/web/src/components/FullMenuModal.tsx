@@ -37,7 +37,7 @@ const FullMenuModal = (props: ModalProps) => {
         showModal={props.showModal}
         setShowModal={props.setShowModal}
       >
-        <div className="flex animate-pulse flex-col gap-2">
+        <div className="flex animate-pulse flex-col gap-2 pb-2">
           <div className="h-80 w-full rounded-t-xl bg-gray-300 object-cover"></div>
           <div className="mx-2 h-6 w-3/5 rounded-full bg-gray-200"></div>
           <div className="mx-2 h-8 w-2/5 rounded-full bg-gray-200"></div>
@@ -45,7 +45,6 @@ const FullMenuModal = (props: ModalProps) => {
           <div className="mx-4 h-4 w-3/5 rounded-full bg-gray-200"></div>
           <div className="mx-4 h-4 w-3/5 rounded-full bg-gray-200"></div>
           <div className="mx-2 mt-4 h-6 w-2/5 rounded-full bg-gray-200"></div>
-          <div className="mx-4 h-4 w-3/5 rounded-full bg-gray-200"></div>
         </div>
       </ModalLayout>
     );
