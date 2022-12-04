@@ -40,6 +40,9 @@ const getFullMenu = async (req: Request, res: Response) => {
   }
   catch (err) {
     const error = err as Error
+    //return 404 if axios error
+    if (error.message === "Request failed with status code 404")
+      return res.status(404).send(error.message)
     return res.status(400).send(error.message)
   }
 };

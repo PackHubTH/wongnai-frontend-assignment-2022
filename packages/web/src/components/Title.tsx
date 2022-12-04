@@ -12,12 +12,12 @@ const Title = (props: Restaurant) => {
         {props.name}
       </h1>
       {props.activeTimePeriod.open === props.activeTimePeriod.close ? (
-        <h1 className="text-md font-semibold text-emerald-600 sm:text-lg">
+        <h1 className="text-md font-semibold text-emerald-700 sm:text-lg">
           เปิด 24 ชั่วโมง
         </h1>
       ) : checkTimePeriod(props.activeTimePeriod) ? (
         <span className="flex flex-wrap justify-center gap-2">
-          <h1 className="text-md font-semibold text-emerald-600 sm:text-lg">
+          <h1 className="text-md font-semibold text-emerald-700 sm:text-lg">
             เปิดอยู่
           </h1>
           <h1 className="text-md text-gray-600 sm:text-lg">

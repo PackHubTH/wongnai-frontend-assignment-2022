@@ -1,7 +1,6 @@
 import useFullMenuItemAPI from "@api/FullMenuItemAPI";
 import Error from "@pages/Error";
 import checkDiscountedPeriod from "@utils/checkDiscountedPeriod";
-import numberWithCommas from "@utils/numberWithCommas";
 import DiscountBadge from "@components/DiscountBadge";
 import ModalLayout from "./ModalLayout";
 import Timer from "./Timer";
@@ -26,11 +25,14 @@ const FullMenuModal = (props: ModalProps) => {
 
   const [isDiscounted, setIsDiscounted] = useState(false);
 
+  const restaurantId = process.env.VITE_RESTAURANT_ID;
+  if (!restaurantId) return <Error />;
+
   const { data, error, isLoading } = useFullMenuItemAPI(
-    import.meta.env.VITE_RESTAURANT_ID,
+    restaurantId,
     props.menuName
   );
-
+  console.log("data", data);
   if (isLoading)
     return (
       <ModalLayout
@@ -51,11 +53,11 @@ const FullMenuModal = (props: ModalProps) => {
 
   if (error) return <Error />;
 
-  // data.discountedPercent = 21;
-  // data.discountedTimePeriod = {
-  //   begin: "00:00",
-  //   end: "04:45",
-  // };
+  data.discountedPercent = 21;
+  data.discountedTimePeriod = {
+    begin: "00:00",
+    end: "04:45",
+  };
 
   if (
     !isDiscounted &&
@@ -67,7 +69,7 @@ const FullMenuModal = (props: ModalProps) => {
 
   return (
     <ModalLayout showModal={props.showModal} setShowModal={props.setShowModal}>
-      <div className="relative h-72 w-full">
+      <div className="relative h-72 w-full" data-testid="full-menu-modal">
         {data.popular && data?.popular.id === data.id && <PopularBadge />}
         <div className="absolute -top-24 h-full w-full bg-gradient-to-b from-black to-transparent"></div>
         <img
@@ -81,15 +83,13 @@ const FullMenuModal = (props: ModalProps) => {
         <div className="flex flex-wrap items-center gap-2 text-2xl font-medium text-green-700">
           {isDiscounted ? (
             <span>
-              {numberWithCommas(
-                Math.round(
-                  (data.fullPrice * (100 - data.discountedPercent)) / 100
-                )
-              )}{" "}
+              {Math.round(
+                (data.fullPrice * (100 - data.discountedPercent)) / 100
+              ).toLocaleString()}{" "}
               บาท
             </span>
           ) : (
-            <span>{numberWithCommas(data.fullPrice)} บาท</span>
+            <span>{data.fullPrice.toLocaleString()} บาท</span>
           )}
           {data.discountedTimePeriod &&
           checkDiscountedPeriod(
@@ -97,7 +97,7 @@ const FullMenuModal = (props: ModalProps) => {
             data.discountedPercent
           ) ? (
             <span className="text-sm font-medium text-gray-500 line-through">
-              {numberWithCommas(data.fullPrice)} บาท{" "}
+              {data.fullPrice.toLocaleString()} บาท{" "}
             </span>
           ) : null}
         </div>
@@ -115,8 +115,8 @@ const FullMenuModal = (props: ModalProps) => {
           </div>
         ) : null}
         <p className="flex flex-wrap gap-2 pt-2 text-xs text-gray-500">
-          ขาย: {numberWithCommas(data.sold)} ชิ้น | เหลือ:{" "}
-          {numberWithCommas(data.totalInStock)} ชิ้น
+          ขาย: {data.sold.toLocaleString()} ชิ้น | เหลือ:{" "}
+          {data.totalInStock.toLocaleString()} ชิ้น
         </p>
       </div>
 

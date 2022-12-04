@@ -34,14 +34,20 @@ const Timer = ({ callQueuedTime, setIsDiscounted }: TimerProps) => {
 
   if (nanoTime < new Date().getTime()) {
     return (
-      <div className="flex items-center text-sm text-red-500">
+      <div
+        className="flex items-center text-sm text-red-500"
+        data-testid="timer-not-trigger"
+      >
         <BiTime className="mr-1 inline-block" />
         <span>00 : 00 : 00</span>
       </div>
     );
   } else {
     return (
-      <div className="flex items-center text-sm text-orange-600">
+      <div
+        className="flex items-center text-sm text-orange-600"
+        data-testid="timer-trigger"
+      >
         <BiTime className="mr-1 inline-block" />
         <span>
           {hours < 10 ? "0" : ""}

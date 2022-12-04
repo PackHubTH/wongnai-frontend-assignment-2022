@@ -20,8 +20,11 @@ const Restaurant = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
 
+  const restaurantId = process.env.VITE_RESTAURANT_ID;
+  if (!restaurantId) return <Error />;
+
   const { data, error, isFetchingNextPage, isLoading, fetchNextPage } =
-    useRestaurantAPI(import.meta.env.VITE_RESTAURANT_ID);
+    useRestaurantAPI(restaurantId);
 
   const handleScroll = () => {
     const offset = window.scrollY;
@@ -47,7 +50,10 @@ const Restaurant = () => {
   if (error) return <Error />;
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gray-200">
+    <div
+      className="flex min-h-screen flex-col items-center bg-gray-200"
+      data-testid="restaurant-page"
+    >
       {showModal && (
         <Modal
           showModal={showModal}
@@ -60,7 +66,7 @@ const Restaurant = () => {
         <TitleLayout scrolled={scrolled}>
           <Title {...data?.pages[0]} />
           <div className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
-            <SearchBox onChange={(e) => setSearch(e)} />
+            <SearchBox onChange={(e) => setSearch(e)} search={search} />
             <ButtonGroup isDefault={isDefault} setIsDefault={setIsDefault} />
           </div>
         </TitleLayout>
@@ -93,7 +99,6 @@ const Restaurant = () => {
                       <ShortMenuItem
                         key={index}
                         item={item}
-                        isFirst={index}
                         onClick={() => {
                           setShowModal(true);
                           setMenuName(item.id);

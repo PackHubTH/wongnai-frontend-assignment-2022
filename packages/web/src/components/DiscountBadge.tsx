@@ -4,7 +4,10 @@ type BadgeProp = {
 
 const PopularBadge = (props: BadgeProp) => {
   return (
-    <span className="inline-flex w-max flex-wrap items-center justify-center rounded-md bg-red-500 px-2.5 py-0.5 text-xs text-white">
+    <span
+      className="inline-flex w-max flex-wrap items-center justify-center rounded-md bg-red-500 px-2.5 py-0.5 text-xs text-white"
+      data-testid="discount-badge"
+    >
       {`ลด ${props.discount} %`}
     </span>
   );

@@ -6,7 +6,7 @@ const useFullMenuItemAPI = (restaurantId: string, menuName: string) => {
     queryKey: ["fullMenu", menuName], 
     queryFn: async () => {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_ENDPOINT}/${restaurantId}/full-menu/${menuName}`
+        `${process.env.VITE_BASE_ENDPOINT}/${restaurantId}/full-menu/${menuName}`
       );
       return data;
     }

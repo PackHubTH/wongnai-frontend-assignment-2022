@@ -7,7 +7,7 @@ const useRestaurantAPI = (restaurantId: string) => {
     queryKey: ['projects'],
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_ENDPOINT}/${restaurantId}?cursor=${pageParam}`
+        `${process.env.VITE_BASE_ENDPOINT}/${restaurantId}?cursor=${pageParam}`
       );
       return data;
     },

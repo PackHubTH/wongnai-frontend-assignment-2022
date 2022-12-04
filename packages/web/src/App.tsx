@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import Restaurant from "@pages/Restaurant";
 
 function App() {
-  console.log(import.meta.env);
   return (
     <div className="flex flex-col">
       <Routes>

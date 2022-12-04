@@ -2,11 +2,12 @@ import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
 type SearchProps = {
+  search: string;
   plcaeholder?: string;
   onChange: (e: string) => void;
 };
 
-const SearchBox = ({ onChange, plcaeholder }: SearchProps) => {
+const SearchBox = ({ onChange, plcaeholder, search }: SearchProps) => {
   return (
     <div className="relative w-full rounded-full border-2 pl-8 pr-2 shadow-md sm:w-1/2">
       <AiOutlineSearch className="absolute left-2 top-1 text-gray-500" />
@@ -15,6 +16,7 @@ const SearchBox = ({ onChange, plcaeholder }: SearchProps) => {
         type="text"
         placeholder={plcaeholder ?? "ค้นหา"}
         onChange={(e) => onChange(e.target.value)}
+        value={search}
       ></input>
     </div>
   );
