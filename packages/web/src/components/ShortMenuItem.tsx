@@ -19,14 +19,6 @@ const ShortMenuItem = ({ item, onClick }: ShortMenuItemProp) => {
     totalInStock,
   } = item;
 
-  // if (name.includes("a")) totalInStock = 0;
-  // if (!discountedPercent) {
-  //   discountedPercent = 21;
-  //   discountedTimePeriod = {
-  //     begin: "00:00",
-  //     end: "02:50",
-  //   };
-  // }
   return (
     <div
       className="relative flex w-full items-center gap-4 rounded-xl border-2 p-4 transition  hover:scale-[1.02] hover:shadow-xl"
@@ -67,9 +59,7 @@ const ShortMenuItem = ({ item, onClick }: ShortMenuItemProp) => {
         <p className="text-sm text-gray-700">
           ขายได้ {sold.toLocaleString()} ชิ้น
         </p>
-        {/* badge */}
         <div className="space-x-2">
-          {/* {isFirst === 0 ? <PopularBadge /> : null} */}
           {discountedTimePeriod &&
           checkDiscountedPeriod(discountedTimePeriod, discountedPercent) ? (
             <DiscountBadge discount={discountedPercent} />

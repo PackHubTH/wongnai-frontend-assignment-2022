@@ -25,7 +25,7 @@ module.exports = {
   // transformIgnorePatterns: [
   //   '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
   // ],
-  // setupFiles: ["dotenv/config"],
+  setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

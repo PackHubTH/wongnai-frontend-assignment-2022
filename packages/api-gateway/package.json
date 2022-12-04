@@ -5,8 +5,7 @@
 	"scripts": {
 		"dev": "ts-node-dev --respawn --transpile-only index.ts",
 		"build": "tsc",
-		"test": "jest",
-		"test:watch": "jest --watch"
+		"test": "jest"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.11",

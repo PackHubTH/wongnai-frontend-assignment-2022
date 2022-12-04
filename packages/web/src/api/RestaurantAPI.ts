@@ -2,9 +2,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const useRestaurantAPI = (restaurantId: string) => {
-  // return useQuery(["restaurant"], () => getRestaurant(restaurantId));
   return useInfiniteQuery({
-    queryKey: ['projects'],
+    queryKey: ["projects"],
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axios.get(
         `${process.env.VITE_BASE_ENDPOINT}/${restaurantId}?cursor=${pageParam}`
@@ -17,7 +16,7 @@ const useRestaurantAPI = (restaurantId: string) => {
       }
       return undefined;
     },
-  })
+  });
 };
 
 export default useRestaurantAPI;

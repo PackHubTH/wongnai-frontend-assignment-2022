@@ -17,24 +17,12 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@pages/*": [
-        "src/pages/*"
-      ],
-      "@type/*": [
-        "src/types/*"
-      ],
-      "@api/*": [
-        "src/api/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@assets/*": [
-        "src/assets/*"
-      ],
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@type/*": ["src/types/*"],
+      "@api/*": ["src/api/*"],
+      "@utils/*": ["src/utils/*"],
+      "@assets/*": ["src/assets/*"]
     }
   },
   "include": ["./src"]

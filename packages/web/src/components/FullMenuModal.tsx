@@ -32,7 +32,6 @@ const FullMenuModal = (props: ModalProps) => {
     restaurantId,
     props.menuName
   );
-  console.log("data", data);
   if (isLoading)
     return (
       <ModalLayout
@@ -53,12 +52,6 @@ const FullMenuModal = (props: ModalProps) => {
 
   if (error) return <Error />;
 
-  data.discountedPercent = 21;
-  data.discountedTimePeriod = {
-    begin: "00:00",
-    end: "04:45",
-  };
-
   if (
     !isDiscounted &&
     data.discountedTimePeriod &&
@@ -73,6 +66,7 @@ const FullMenuModal = (props: ModalProps) => {
         {data.popular && data?.popular.id === data.id && <PopularBadge />}
         <div className="absolute -top-24 h-full w-full bg-gradient-to-b from-black to-transparent"></div>
         <img
+          alt={data.name ?? "image"}
           src={data.largeImage ?? "https://via.placeholder.com/600?text=image"}
           className="h-full w-full rounded-t-xl bg-fixed object-cover"
         />

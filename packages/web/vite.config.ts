@@ -8,9 +8,6 @@ export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths(),
-    EnvironmentPlugin([
-      "VITE_BASE_ENDPOINT",
-      "VITE_RESTAURANT_ID",
-    ]),
+    EnvironmentPlugin(["VITE_BASE_ENDPOINT", "VITE_RESTAURANT_ID"]),
   ],
 });

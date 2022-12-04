@@ -3,9 +3,9 @@ import getTimefromString from "./getTimeFromString";
 type PeriodProps = {
   begin: string;
   end: string;
-}
+};
 
-const checkDiscountedPeriod = (period: PeriodProps , percent: number) => {
+const checkDiscountedPeriod = (period: PeriodProps, percent: number) => {
   const now = new Date().getTime();
   if (percent > 0) {
     return (

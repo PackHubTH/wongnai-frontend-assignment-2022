@@ -8,8 +8,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Restaurant />} />
       </Routes>
-      {/* <Banner />
-      <h1>Edit this app to complete LINE MAN Wongnai Frontend Assignment!</h1> */}
     </div>
   );
 }
